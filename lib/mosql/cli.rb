@@ -91,6 +91,11 @@ module MoSQL
           @options[:skip_import] = true
         end
 
+        opts.on("--create-new-tables-and-import","Create tables that are new in collections and import data") do
+          @options[:create_new_tables] = true
+          @options[:no_drop_tables] = true
+        end
+
         opts.on("--reimport", "Force a data re-import") do
           @options[:reimport] = true
         end
@@ -158,7 +163,6 @@ module MoSQL
       connect_mongo
 
       metadata_table = MoSQL::Tailer.create_table(@sql.db, 'mosql_tailers')
-
       @tailer = MoSQL::Tailer.new([@mongo], :existing, metadata_table,
                                   :service => options[:service])
 
@@ -172,9 +176,11 @@ module MoSQL
         @streamer.import
       end
 
+
       unless options[:skip_tail]
         @streamer.optail
       end
+
     end
   end
 end

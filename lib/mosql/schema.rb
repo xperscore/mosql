@@ -75,6 +75,29 @@ module MoSQL
       Sequel.default_timezone = :utc
     end
 
+    def get_new_collections(db)
+      new_collections = {}
+
+      @map.each do |mongodb, dbspec|
+        new_collections[mongodb] = []
+        dbspec.each do |n, collection|
+          next unless n.is_a?(String)
+
+          meta = collection[:meta]
+          tablename = meta[:table]
+
+          exists = db.table_exists?(tablename)
+
+          unless exists
+            log.info("Table does not exist for collection #{tablename}" )
+            new_collections[mongodb] << {n => collection}
+          end
+        end
+      end
+
+      new_collections
+    end
+
     def create_schema(db, clobber=false)
       @map.values.each do |dbspec|
         dbspec.each do |n, collection|
