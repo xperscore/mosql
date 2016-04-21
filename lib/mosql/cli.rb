@@ -91,9 +91,8 @@ module MoSQL
           @options[:skip_import] = true
         end
 
-        opts.on("--create-new-tables-and-import","Create tables that are new in collections and import data") do
-          @options[:create_new_tables] = true
-          @options[:no_drop_tables] = true
+        opts.on("--empty-table-import","Create tables that are new in collections and import data") do
+          @options[:empty_table_import] = true
         end
 
         opts.on("--reimport", "Force a data re-import") do
