@@ -28,8 +28,8 @@ module MoSQL
         initial_import
       end
 
-      if options[:create_new_tables]
-        create_new_tables_and_import
+      if options[:empty_table_import]
+        import_data_for_empty_tables
       end
     end
 
@@ -90,9 +90,8 @@ module MoSQL
       Time.now - start
     end
 
-    def create_new_tables_and_import
-      new_collections = @schema.get_new_collections(@sql.db)
-      @schema.create_schema(@sql.db, !options[:no_drop_tables])
+    def import_data_for_empty_tables
+      new_collections = @schema.find_empty_tables(@sql.db)
       import_data_for_collections(new_collections)
     end
 

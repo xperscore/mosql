@@ -75,7 +75,7 @@ module MoSQL
       Sequel.default_timezone = :utc
     end
 
-    def get_new_collections(db)
+    def find_empty_tables(db)
       new_collections = {}
 
       @map.each do |mongodb, dbspec|
@@ -86,10 +86,13 @@ module MoSQL
           meta = collection[:meta]
           tablename = meta[:table]
 
-          exists = db.table_exists?(tablename)
+          sql = "SELECT COUNT(*) as row_count FROM  #{tablename};"
+          results = db.fetch sql
+          row_count = results.get('row_count')
 
-          unless exists
-            log.info("Table does not exist for collection #{tablename}" )
+          empty_table  = row_count == 0
+          if empty_table
+            log.info("Empty Table #{tablename}  for collection #{tablename}" )
             new_collections[mongodb] << {n => collection}
           end
         end
