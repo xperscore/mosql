@@ -1,4 +1,4 @@
-source 'http://localhost:9292'
+source 'https://gems.whoknows.com'
 
 gemspec
 
