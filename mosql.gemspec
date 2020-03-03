@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.version       = MoSQL::VERSION
 
   gem.add_runtime_dependency "sequel"
-  gem.add_runtime_dependency "pg"
+  gem.add_runtime_dependency "pg", "1.1.4"
   gem.add_runtime_dependency "rake", "~> 12.0.0"
   gem.add_runtime_dependency "log4r"
   gem.add_runtime_dependency "json"
